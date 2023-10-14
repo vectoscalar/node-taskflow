@@ -1,0 +1,8 @@
+# tasks-config.yml
+tasks:
+  - name: Task1
+    function: task1
+    conditions:
+      - property: dataValue
+        operator: '>'
+        threshold: 50
