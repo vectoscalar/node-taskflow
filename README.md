@@ -71,4 +71,4 @@ The executor will read the configuration from tasks-config.yml, execute the matc
 9. Add functionality of taskType (task, wait etc.) default type will be task [low priority]
 10. Add description proproty with task 
 11. ehance the confition - property. Properties can be a path n object. like (data.item[0].name) [high priority]
-12. Add asyn to execute function to support asynchronous job
+12. Add async to execute function to support asynchronous job {topmost priority}
