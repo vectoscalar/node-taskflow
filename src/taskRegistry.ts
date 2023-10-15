@@ -1,4 +1,19 @@
+
+interface Task {
+  taskFunction: Function;
+  conditions: Condition[];
+}
+  
+interface Condition {
+    property: string;
+    operator: string;
+    threshold: number;
+}
+
+
 class TaskRegistry {
+    tasks: Task[]
+    
     constructor() {
       this.tasks = [];
     }

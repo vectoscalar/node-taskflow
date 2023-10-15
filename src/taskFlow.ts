@@ -1,27 +1,40 @@
 import TaskRegistry from "./taskRegistry";
-import yaml from "js-yaml";
-import fs from "fs";
-import path from "path";
+import * as yaml from "js-yaml";
+import * as fs from 'fs'
+import * as path from "path";
 
 // executor.js
 
 class TaskFlow {
-  taskRegistry: TaskRegistry;
+  static taskRegistry: TaskRegistry;
 
-  constructor() {
-    this.taskRegistry = new TaskRegistry();
-    this.addTasksFromConfig();
-  }
+ 
+  static configure(ymlPath:string) {
 
-  static getInstance() {
-    if (!Executor.instance) {
-      Executor.instance = new Executor();
+    if (!this.taskRegistry) {
+      this.taskRegistry = new TaskRegistry();
     }
-    return Executor.instance;
+
+    this.addTasksFromConfig(ymlPath);
+
   }
 
-  addTasksFromConfig() {
-    const configPath = path.join(__dirname, 'tasks-config.yml');
+
+  static execute(inputData: any) {
+    const matchedTask = this.taskRegistry.getMatchingTask(inputData);
+
+    if (matchedTask) {
+       // console.log('Executing task:', matchedTask);
+      return matchedTask(inputData);
+    } else {
+      console.error('No matching task found.');
+      return null;
+    }
+  }
+
+
+  private static addTasksFromConfig(ymlPath: string) {
+    const configPath = path.join(__dirname, ymlPath);
     const config = this.loadConfig(configPath);
 
     if (config && config.tasks) {
@@ -35,9 +48,10 @@ class TaskFlow {
     }
   }
 
-  loadConfig(configPath) {
+  private static loadConfig(configPath) {
     try {
       const configFile = fs.readFileSync(configPath, 'utf8');
+      //console.log('Loaded configuration:', configFile, yaml);
       return yaml.load(configFile);
     } catch (error) {
       console.error('Error loading configuration:', error);
@@ -45,30 +59,18 @@ class TaskFlow {
     }
   }
 
-  loadTaskFunction(functionName) {
+  private static loadTaskFunction(functionName) {
     try {
-      return require(`./${functionName}`);
+      return require(`./${functionName}`).default;
     } catch (error) {
       console.error('Error loading task function:', error);
       return null;
     }
   }
 
-  addTask(taskFunction, conditions) {
+  private static addTask(taskFunction, conditions) {
     this.taskRegistry.addTask(taskFunction, conditions);
-  }
-
-  execute(inputData) {
-    const matchedTask = this.taskRegistry.getMatchingTask(inputData);
-
-    if (matchedTask) {
-        console.log('Executing task:', matchedTask.name);
-      return matchedTask(inputData);
-    } else {
-      console.error('No matching task found.');
-      return null;
-    }
-  }
+  }   
 }
 
 
