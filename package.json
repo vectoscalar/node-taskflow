@@ -1,18 +1,17 @@
 {
-    "name": "task-executor",
+    "name": "taskflow",
     "version": "1.0.0",
     "description": "A simple task execution framework with conditions",
-    "main": "executor.js",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "files": [
+        "/dist"
+    ],
     "scripts": {
-        "start": "babel-node main.js"
-    },
-    "dependencies": {
-        "js-yaml": "^4.1.0"
+        "compile": "tsc",
+        "test": "tsc && node dist/test/test.js"
     },
     "devDependencies": {
-        "@babel/core": "^7.23.2",
-        "@babel/node": "^7.22.19",
-        "@babel/plugin-proposal-decorators": "^7.23.2",
-        "@babel/preset-env": "^7.23.2"
+        "typescript": "^5.2.2"
     }
 }

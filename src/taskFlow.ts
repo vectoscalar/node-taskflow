@@ -1,9 +1,13 @@
-// executor.js
-const yaml = require('js-yaml');
-const fs = require('fs');
-const path = require('path');
+import TaskRegistry from "./taskRegistry";
+import yaml from "js-yaml";
+import fs from "fs";
+import path from "path";
 
-class Executor {
+// executor.js
+
+class TaskFlow {
+  taskRegistry: TaskRegistry;
+
   constructor() {
     this.taskRegistry = new TaskRegistry();
     this.addTasksFromConfig();
@@ -67,36 +71,6 @@ class Executor {
   }
 }
 
-class TaskRegistry {
-  constructor() {
-    this.tasks = [];
-  }
-
-  addTask(taskFunction, conditions) {
-    this.tasks.push({ taskFunction, conditions });
-  }
-
-  getMatchingTask(inputData) {
-    return this.tasks.find(({ conditions }) => this.evaluateConditions(conditions, inputData))?.taskFunction || null;
-  }
-
-  evaluateConditions(conditions, inputData) {
-    return conditions.every(({ property, operator, threshold }) => {
-      const value = inputData[property];
-
-      switch (operator) {
-        case '>':
-          return value > threshold;
-        case '<':
-          return value < threshold;
-        case '=':
-          return value === threshold;
-        default:
-          return false;
-      }
-    });
-  }
-}
 
 
-module.exports = Executor;
+export default TaskFlow;
