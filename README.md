@@ -15,6 +15,11 @@ A simple task flow execution framework based on conditions.
     ``` bash
     npm install
     ```
+3. **test:**
+    ``` bash
+    npm run test
+    ```
+
 ## Usage
 Define your task function in separate files.
 For example, create a file named task1.js:
