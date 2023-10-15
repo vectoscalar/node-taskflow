@@ -1,10 +1,10 @@
-# tasks-config.yml
-settings:
-  - logLevel: info
-tasks:
-  - name: Task1
-    function: 'test/task1.js'
-    conditions:
-      - property: dataValue
-        operator: '>'
-        threshold: 150
+  # tasks-config.yml
+  settings:
+    - logLevel: info
+  tasks:
+    - name: Task1
+      function: 'test/task1.js'
+      conditions:
+        - property: dataValue
+          operator: '>'
+          threshold: 150
