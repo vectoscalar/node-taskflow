@@ -2,9 +2,10 @@ import TaskFlow from "../taskFlow";
 
 
 
-TaskFlow.configure('./test/tasks-config.yml')
+TaskFlow.configure('./example/tasks-config.yml')
 
 
 
-const inputData = {dataValue: 100};
+
+const inputData = {dataValue: 200};
 TaskFlow.execute(inputData);
