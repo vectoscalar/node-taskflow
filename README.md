@@ -6,23 +6,7 @@ A simple task flow execution framework based on conditions.
 
 ```bash
   npm i node-taskflow
-
-  import TaskFlow from "node-taskflow";
 ```
-
-1. **Clone this repository:**
-   ``` bash
-   git clone https://github.com/vectoscalar/node-taskflow
-   cd node-taskflow
-   ```
-2. **Install dependencies:**
-    ``` bash
-    npm install
-    ```
-3. **test:**
-    ``` bash
-    npm run test
-    ```
 
 ## Usage
 Define your task function in separate files.
@@ -42,26 +26,52 @@ Define your task conditions in a yml file:
     - logLevel: info
   tasks:
     - name: Task1
-      function: 'test/task1.js'
+      function: 'test.js'
       conditions:
-        - property: dataValue
-          operator: '>'
-          threshold: 150
+      - type: 'gt'
+        property: 'dataValue'
+        threshold: 150
 
 ```
 Run the executor:
 
 ```bash
     // test.ts
-    import TaskFlow from "../taskFlow";
+    import { TaskFlow } from "node-taskflow";
 
-    TaskFlow.configure('./test/tasks-config.yml')
+   TaskFlow.configure('./test.yml').then(() => {
+      const inputData = {dataValue: 300};
+      TaskFlow.execute(inputData);    
+   });
 
-    const inputData = {dataValue: 100};
-    TaskFlow.execute(inputData);
+   // or 
+
+  await TaskFlow.configure('./test.yml')
+    
+  const inputData = {dataValue: 300};
+  TaskFlow.execute(inputData);    
+  
 ```
 
 The executor will read the configuration from tasks-config.yml, execute the matching task based on conditions, and log the result.
+
+
+### Development
+
+1. **Clone this repository:**
+   ``` bash
+   git clone https://github.com/vectoscalar/node-taskflow
+   cd node-taskflow
+   ```
+2. **Install dependencies:**
+    ``` bash
+    npm install
+    ```
+3. **test:**
+    ``` bash
+    npm run test
+    ```
+
 
 ***Pending***
 1. Add prettier

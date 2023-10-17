@@ -3,17 +3,16 @@ import * as yaml from 'js-yaml';
 import * as fs from 'fs';
 import * as path from 'path';
 
-// executor.js
 
 class TaskFlow {
   static taskRegistry: TaskRegistry;
 
-  static configure(ymlPath: string) {
+  static async configure(ymlPath: string) {
     if (!this.taskRegistry) {
       this.taskRegistry = new TaskRegistry();
     }
 
-    this.addTasksFromConfig(ymlPath);
+    await this.addTasksFromConfig(ymlPath);
   }
 
   static async execute(inputData: any) {
@@ -30,18 +29,23 @@ class TaskFlow {
     }
   }
 
-  private static addTasksFromConfig(ymlPath: string) {
+  private static async addTasksFromConfig(ymlPath: string) {
+    // To support running from node_modules
+    if (__dirname.includes("node_modules")) {
+      __dirname = __dirname.replace("node_modules/node-taskflow/dist", "");
+    }
+
     const configPath = path.join(__dirname, ymlPath);
     const config = this.loadConfig(configPath);
 
     if (config && config.tasks) {
-      config.tasks.forEach((taskConfig) => {
+      await Promise.all(config.tasks.map(async (taskConfig) => {
         const { function: functionName, conditions } = taskConfig;
-        const taskFunction = this.loadTaskFunction(functionName);
+        const taskFunction = await this.loadTaskFunction(functionName);
         if (taskFunction) {
-          this.addTask(taskFunction, conditions);
+          this.addTask(taskFunction.default || taskFunction, conditions);
         }
-      });
+      }));
     }
   }
 
@@ -56,9 +60,12 @@ class TaskFlow {
     }
   }
 
-  private static loadTaskFunction(functionName) {
+  private static async loadTaskFunction(functionName) {
     try {
-      return require(`./${functionName}`).default;
+      if (__dirname.includes("node_modules")) {
+        __dirname = __dirname.replace("node_modules/node-taskflow/dist", "");
+      }
+      return (await import(`${__dirname}/${functionName}`)).default;
     } catch (error) {
       console.error('Error loading task function:', error);
       return null;

@@ -1,6 +1,6 @@
 {
     "name": "node-taskflow",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "A simple task execution framework with conditions",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -13,10 +13,11 @@
     },
     "devDependencies": {
         "@types/node": "^20.8.6",
-        "prettier": "^3.0.3",
+        "prettier": "^3.0.3"
     },
     "dependencies": {
         "js-yaml": "^4.1.0",
         "typescript": "^5.2.2"
-    }
+    }    
+
 }
