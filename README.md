@@ -12,7 +12,7 @@ A simple task flow execution framework based on conditions.
 Define your task function in separate files.
 For example, create a file named task1.js:
 ```javascript
-    // task1.js
+    // test.js in root directory
   export default function Task1(data) {  
     console.log('Executing Task1 with data:', data);  
   }
@@ -21,7 +21,7 @@ For example, create a file named task1.js:
 Define your task conditions in a yml file:
 
 ```yaml
-  # tasks-config.yml
+  # test.yml in root directory
   settings:
     - logLevel: info
   tasks:
