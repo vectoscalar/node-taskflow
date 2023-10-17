@@ -1,8 +1,14 @@
-import customConditions from "./customConditions";
+import customConditions from './customConditions';
 
 interface Task {
   taskFunction: Function;
-  conditions: ((inputData: any) => boolean)[];
+  conditions: Condition[];
+}
+
+interface Condition {
+  type: string;
+  property: string;
+  threshold: number;
 }
 
 class TaskRegistry {
@@ -19,20 +25,20 @@ class TaskRegistry {
   getMatchingTask(inputData) {
     return (
       this.tasks.find(({ conditions }) =>
-        this.evaluateConditions(conditions, inputData)
+        this.evaluateConditions(conditions, inputData),
       )?.taskFunction || null
     );
   }
 
   evaluateConditions(conditions, inputData) {
-    return conditions.every(({ conditionName, property, threshold }) => {
-      const customCondition = customConditions[conditionName];
+    return conditions.every(({ type, property, threshold }) => {
+      const customCondition = customConditions[type];
 
       if (customCondition) {
         const value = inputData[property];
         return customCondition(value, threshold);
       } else {
-        console.error(`Unknown condition: ${conditionName}`);
+        console.error(`Unknown condition: ${type}`);
         return false;
       }
     });

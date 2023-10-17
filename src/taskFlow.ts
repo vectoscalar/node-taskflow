@@ -1,7 +1,7 @@
-import TaskRegistry from "./taskRegistry";
-import * as yaml from "js-yaml";
-import * as fs from "fs";
-import * as path from "path";
+import TaskRegistry from './taskRegistry';
+import * as yaml from 'js-yaml';
+import * as fs from 'fs';
+import * as path from 'path';
 
 // executor.js
 
@@ -20,17 +20,12 @@ class TaskFlow {
     const matchedTask = this.taskRegistry.getMatchingTask(inputData);
 
     if (matchedTask) {
-      try {
-        // Use `await` to execute the task function
-        const result = await matchedTask(inputData);
-        // Handle the result if needed
-        return result;
-      } catch (error) {
-        console.error("Error executing task:", error);
-        return null;
-      }
+      // Use `await` to execute the task function
+      const result = await matchedTask(inputData);
+      // Handle the result if needed
+      return result;
     } else {
-      console.error("No matching task found.");
+      console.error('No matching task found.');
       return null;
     }
   }
@@ -52,11 +47,11 @@ class TaskFlow {
 
   private static loadConfig(configPath) {
     try {
-      const configFile = fs.readFileSync(configPath, "utf8");
+      const configFile = fs.readFileSync(configPath, 'utf8');
       //console.log('Loaded configuration:', configFile, yaml);
       return yaml.load(configFile);
     } catch (error) {
-      console.error("Error loading configuration:", error);
+      console.error('Error loading configuration:', error);
       return null;
     }
   }
@@ -65,7 +60,7 @@ class TaskFlow {
     try {
       return require(`./${functionName}`).default;
     } catch (error) {
-      console.error("Error loading task function:", error);
+      console.error('Error loading task function:', error);
       return null;
     }
   }

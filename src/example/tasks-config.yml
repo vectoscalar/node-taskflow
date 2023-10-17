@@ -5,6 +5,6 @@
     - name: Task1
       function: 'example/task1.js'
       conditions:
-      - conditionName: 'greaterThan'
+      - type: 'gt'
         property: 'dataValue'
         threshold: 150
