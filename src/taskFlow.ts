@@ -1,37 +1,34 @@
-import TaskRegistry from "./taskRegistry";
-import * as yaml from "js-yaml";
-import * as fs from 'fs'
-import * as path from "path";
+import TaskRegistry from './taskRegistry';
+import * as yaml from 'js-yaml';
+import * as fs from 'fs';
+import * as path from 'path';
 
 // executor.js
 
 class TaskFlow {
   static taskRegistry: TaskRegistry;
 
- 
-  static configure(ymlPath:string) {
-
+  static configure(ymlPath: string) {
     if (!this.taskRegistry) {
       this.taskRegistry = new TaskRegistry();
     }
 
     this.addTasksFromConfig(ymlPath);
-
   }
 
-
-  static execute(inputData: any) {
+  static async execute(inputData: any) {
     const matchedTask = this.taskRegistry.getMatchingTask(inputData);
 
     if (matchedTask) {
-       // console.log('Executing task:', matchedTask);
-      return matchedTask(inputData);
+      // Use `await` to execute the task function
+      const result = await matchedTask(inputData);
+      // Handle the result if needed
+      return result;
     } else {
       console.error('No matching task found.');
       return null;
     }
   }
-
 
   private static addTasksFromConfig(ymlPath: string) {
     const configPath = path.join(__dirname, ymlPath);
@@ -70,9 +67,7 @@ class TaskFlow {
 
   private static addTask(taskFunction, conditions) {
     this.taskRegistry.addTask(taskFunction, conditions);
-  }   
+  }
 }
-
-
 
 export default TaskFlow;

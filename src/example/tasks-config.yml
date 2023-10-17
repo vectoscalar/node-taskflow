@@ -3,8 +3,8 @@
     - logLevel: info
   tasks:
     - name: Task1
-      function: 'test/task1.js'
+      function: 'example/task1.js'
       conditions:
-        - property: dataValue
-          operator: '>'
-          threshold: 150
+      - type: 'gt'
+        property: 'dataValue'
+        threshold: 150
