@@ -1,5 +1,5 @@
 {
-    "name": "taskflow",
+    "name": "node-taskflow",
     "version": "0.0.1",
     "description": "A simple task execution framework with conditions",
     "main": "dist/index.js",

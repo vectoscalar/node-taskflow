@@ -4,7 +4,11 @@ A simple task flow execution framework based on conditions.
 
 ## Installation
 
-// TODO: add npm details when published
+```bash
+  npm i node-taskflow
+
+  import TaskFlow from "node-taskflow";
+```
 
 1. **Clone this repository:**
    ``` bash
