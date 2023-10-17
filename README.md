@@ -13,9 +13,9 @@ Define your task function in separate files.
 For example, create a file named task1.js:
 ```javascript
     // task1.js
-    export default function Task1(data) {  
+  export default function Task1(data) {  
     console.log('Executing Task1 with data:', data);  
-    }
+  }
 ```
 
 Define your task conditions in a yml file:
@@ -36,13 +36,13 @@ Define your task conditions in a yml file:
 Run the executor:
 
 ```bash
-    // test.ts
-    import { TaskFlow } from "node-taskflow";
+  // test.ts
+  import { TaskFlow } from "node-taskflow";
 
-   TaskFlow.configure('./test.yml').then(() => {
-      const inputData = {dataValue: 300};
-      TaskFlow.execute(inputData);    
-   });
+  TaskFlow.configure('./test.yml').then(() => {
+    const inputData = {dataValue: 300};
+    TaskFlow.execute(inputData);    
+  });
 
    // or 
 
