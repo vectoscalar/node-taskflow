@@ -74,15 +74,11 @@ The executor will read the configuration from tasks-config.yml, execute the matc
 
 
 ***Pending***
-1. Add prettier
-2. Add types whereever possible
-3. Add condition evaluation type (AND/OR) in tasks yml. our conditions are array [low priority]
-4. Add Zod (https://github.com/colinhacks/zod) for validation of yml.
-5. Support class as task as well. (should must subclass the baseTask) [low priority]
-6. curently only default exported function is supported. pick function from the name field in yml. check process of registraton. 
-7. Add proper logs
-8. Add functionality of nextTask [low priority]
-9. Add functionality of taskType (task, wait etc.) default type will be task [low priority]
-10. Add description proproty with task 
-11. ehance the confition - property. Properties can be a path n object. like (data.item[0].name) [high priority]
-12. Add async to execute function to support asynchronous job {topmost priority}
+1. Add condition evaluation type (AND/OR) in tasks yml. our conditions are array [low priority]
+2. Add Zod (https://github.com/colinhacks/zod) for validation of yml.
+3. Support class as task as well. (should must subclass the baseTask) [low priority]
+4. curently only default exported function is supported. pick function from the name field in yml. check process of registraton. 
+5. Add proper logs
+6. Add functionality of nextTask [low priority]
+7. Add functionality of taskType (task, wait etc.) default type will be task [low priority]
+8. Add description property with task 
