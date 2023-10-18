@@ -8,3 +8,6 @@
       - type: 'gt'
         property: 'dataValue'
         threshold: 150
+      - type: 'lt'
+        property: 'dataValue'
+        threshold: 200
