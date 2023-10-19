@@ -1,12 +1,8 @@
 // BaseTask.ts
-class BaseTask {
-    condition(inputData: any): boolean {
-        return true; // Default condition, always return true
-    }
+abstract class BaseTask {
+    abstract condition(inputData: any): boolean;
 
-    async execute(inputData: any): Promise<any> {
-        console.log('Base task execution with data:', inputData);
-    }
+    abstract execute(inputData: any): Promise<any>;
 }
 
 export default BaseTask;
