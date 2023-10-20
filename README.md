@@ -16,6 +16,20 @@ For example, create a file named task1.js:
   export default function Task1(data) {  
     console.log('Executing Task1 with data:', data);  
   }
+  // or extend base class to create task
+import  {BaseTask}  from '../index';
+
+export class MyTask extends BaseTask {
+    condition(inputData: any): boolean {
+        return inputData.someCondition; // Custom condition for the class
+    }
+
+    async execute(inputData: any): Promise<any> {
+        console.log('Custom task execution with data:', inputData); // Custom task execution logic
+    }
+}
+
+
 ```
 
 Define your task conditions in a yml file:
@@ -74,11 +88,9 @@ The executor will read the configuration from tasks-config.yml, execute the matc
 
 
 ***Pending***
-1. Add condition evaluation type (AND/OR) in tasks yml. our conditions are array [low priority]
-2. Add Zod (https://github.com/colinhacks/zod) for validation of yml.
-3. Support class as task as well. (should must subclass the baseTask) [low priority]
-4. curently only default exported function is supported. pick function from the name field in yml. check process of registraton. 
-5. Add proper logs
-6. Add functionality of nextTask [low priority]
-7. Add functionality of taskType (task, wait etc.) default type will be task [low priority]
-8. Add description property with task 
+1. Add Zod (https://github.com/colinhacks/zod) for validation of yml.
+2. curently only default exported function is supported. pick function from the name field in yml. check process of registraton. 
+3. Add proper logs
+4. Add functionality of nextTask [low priority]
+5. Add functionality of taskType (task, wait etc.) default type will be task [low priority]
+6. Add description property with task 
