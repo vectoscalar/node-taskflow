@@ -6,45 +6,37 @@ import * as path from 'path';
 
 class TaskFlow {
     static taskRegistry: TaskRegistry;
-
+  
     static async configure(ymlPath: string) {
-        if (!this.taskRegistry) {
-            this.taskRegistry = new TaskRegistry();
-        }
-
-        await this.addTasksFromConfig(ymlPath);
-    }
-
-    static async execute(inputData: any) {
-        const matchedTask = this.taskRegistry.getMatchingTask(inputData);
-
-        if (matchedTask) {
-          if (typeof matchedTask === 'function') {
-              const taskFunction = matchedTask as (inputData: any) => Promise<any>;
-              const result = await taskFunction(inputData);
-              return result;
-          } else if (typeof matchedTask === 'function' || typeof matchedTask === 'object') {
-              const taskInstance = typeof matchedTask === 'function' ? (new (matchedTask as { new (): any })() as any) : matchedTask;
-              if (typeof taskInstance.condition === 'function') {
-                  if (taskInstance.condition(inputData)) {
-                      const result = await taskInstance.execute(inputData);
-                      return result;
-                  } else {
-                      console.log('Class-based task condition not met.');
-                  }
-              }
-          }
-      } else {
-          console.error('No matching task found.');
-          return null;
+      if (!this.taskRegistry) {
+        this.taskRegistry = new TaskRegistry();
       }
-    }      
+  
+      await this.addTasksFromConfig(ymlPath);
+    }
+  
+    static async execute(inputData: any) {
+      const matchedTask = this.taskRegistry.getMatchingTask(inputData);
+  
+      if (matchedTask) {
+        // Use `await` to execute the task function
+        const result = this.taskRegistry.executeTask(matchedTask, inputData); // Using the updated TaskRegistry that help us to optimize the execution of class-based tasks and reduce unnecessary instantiations.
 
+
+        // Handle the result if needed
+        return result;
+      } else {
+        console.error('No matching task found.');
+        return null;
+      }
+    }
+  
     private static async addTasksFromConfig(ymlPath: string) {
-        if (__dirname.includes('node_modules')) {
-            __dirname = __dirname.replace('node_modules/node-taskflow/dist', '');
-        }
-
+      // To support running from node_modules
+      if (__dirname.includes("node_modules")) {
+        __dirname = __dirname.replace("node_modules/node-taskflow/dist", "");
+      }
+  
         const configPath = path.join(__dirname, ymlPath);
         const config = this.loadConfig(configPath);
 

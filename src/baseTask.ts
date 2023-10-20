@@ -1,4 +1,3 @@
-// BaseTask.ts
 abstract class BaseTask {
     abstract condition(inputData: any): boolean;
 
