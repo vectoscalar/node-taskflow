@@ -1,2 +1,4 @@
 import TaskFlow from "./taskFlow";
-export {TaskFlow}
+import BaseTask from "./baseTask";
+
+export {TaskFlow, BaseTask}

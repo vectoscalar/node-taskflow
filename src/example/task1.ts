@@ -1,4 +1,12 @@
+// task1.ts
+import  {BaseTask}  from '../index';
 
-export default function Task1(data) {  
-  console.log('Executing Task1 with data:', data);  
+export class MyTask extends BaseTask {
+    condition(inputData: any): boolean {
+        return inputData.someCondition; // Custom condition for the class
+    }
+
+    async execute(inputData: any): Promise<any> {
+        console.log('Custom task execution with data:', inputData); // Custom task execution logic
+    }
 }
