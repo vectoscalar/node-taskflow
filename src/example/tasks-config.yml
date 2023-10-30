@@ -1,13 +1,9 @@
-  # tasks-config.yml
-  settings:
-    - logLevel: info
-  tasks:
-    - name: Task1
-      function: 'example/task1.js'
-      conditions:
-      - type: 'gt'
+settings:
+  - logLevel: info
+tasks:
+  - name: Task1
+    function: 'example/task1.js' # Specify the corrected relative path
+    conditions:
+      - type: 'contains'
         property: 'dataValue'
-        threshold: 150
-      - type: 'lt'
-        property: 'dataValue'
-        threshold: 200
+        additionalParam: 'Order'

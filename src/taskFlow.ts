@@ -17,6 +17,7 @@ class TaskFlow {
   
     static async execute(inputData: any) {
       const matchedTask = this.taskRegistry.getMatchingTask(inputData);
+      console.log(matchedTask)
   
       if (matchedTask) {
         // Use `await` to execute the task function

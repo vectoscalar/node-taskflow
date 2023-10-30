@@ -1,15 +1,18 @@
 import customConditions from './customConditions';
 
 interface Task {
-  taskFunction: Function;
+  taskFunction: Function 
   conditions: Condition[];
 }
+
 
 interface Condition {
   type: string;
   property: string;
   threshold: number;
+  additionalParam?: any; // Make it optional to support custom conditions with additional parameters
 }
+
 
 class TaskRegistry {
   tasks: Task[];
@@ -26,7 +29,7 @@ class TaskRegistry {
   getMatchingTask(inputData) {
     return (
       this.tasks.find(({ conditions }) =>
-        this.evaluateConditions(conditions, inputData),
+        this.evaluateConditions(conditions, inputData)
       )?.taskFunction || null
     );
   }
@@ -45,6 +48,7 @@ class TaskRegistry {
 
   executeTask(taskFunction, inputData) {
     if (typeof taskFunction === 'function') {
+      console.log(taskFunction)
       // Handle function-based tasks
       return taskFunction(inputData);
     } else if (typeof taskFunction === 'object') {
@@ -62,18 +66,22 @@ class TaskRegistry {
   }
 
   evaluateConditions(conditions, inputData) {
-    return conditions.every(({ type, property, threshold }) => {
+    return conditions.every(({ type, property, additionalParam }) => {
       const customCondition = customConditions[type];
-
       if (customCondition) {
-        const value = inputData[property];
-        return customCondition(value, threshold);
+        const args = [inputData[property]];
+        if (additionalParam !== undefined) {
+          args.push(additionalParam);
+        }
+        console.log(customCondition(...args))
+        return customCondition(...args);
       } else {
         console.error(`Unknown condition: ${type}`);
         return false;
       }
     });
   }
+  
 }
 
 export default TaskRegistry;
