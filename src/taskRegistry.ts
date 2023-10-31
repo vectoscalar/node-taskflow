@@ -34,36 +34,6 @@ class TaskRegistry {
     );
   }
 
-  // Function to get or create a cached instance of a class-based task
-  getTaskInstance(taskFunction) {
-    const taskName = taskFunction.name;
-    if (this.taskInstanceCache.has(taskName)) {
-      return this.taskInstanceCache.get(taskName);
-    } else {
-      const instance = new taskFunction();
-      this.taskInstanceCache.set(taskName, instance);
-      return instance;
-    }
-  }
-
-  executeTask(taskFunction, inputData) {
-    if (typeof taskFunction === 'function') {
-      console.log(taskFunction)
-      // Handle function-based tasks
-      return taskFunction(inputData);
-    } else if (typeof taskFunction === 'object') {
-      // Handle class-based tasks
-      const taskInstance = this.getTaskInstance(taskFunction.constructor);
-      if (typeof taskInstance.condition === 'function') {
-        if (taskInstance.condition(inputData)) {
-          return taskInstance.execute(inputData);
-        } else {
-          console.log('Class-based task condition not met.');
-        }
-      }
-    }
-    return null;
-  }
 
   evaluateConditions(conditions, inputData) {
     return conditions.every(({ type, property, additionalParam }) => {

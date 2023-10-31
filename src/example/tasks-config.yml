@@ -4,6 +4,6 @@ tasks:
   - name: Task1
     function: 'example/task1.js' # Specify the corrected relative path
     conditions:
-      - type: 'contains'
+      - type: 'gt'
         property: 'dataValue'
-        additionalParam: 'Order'
+        additionalParam: '100'

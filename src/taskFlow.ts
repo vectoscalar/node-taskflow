@@ -1,84 +1,95 @@
-// taskFlow.ts
-import TaskRegistry from './taskRegistry';
-import * as yaml from 'js-yaml';
-import * as fs from 'fs';
-import * as path from 'path';
+import TaskRegistry from "./taskRegistry";
+import * as yaml from "js-yaml";
+import * as fs from 'fs'
+import * as path from "path";
+
+
+
+
+
+// executor.js
 
 class TaskFlow {
-    static taskRegistry: TaskRegistry;
-  
-    static async configure(ymlPath: string) {
-      if (!this.taskRegistry) {
-        this.taskRegistry = new TaskRegistry();
-      }
-  
-      await this.addTasksFromConfig(ymlPath);
+  static taskRegistry: TaskRegistry;
+
+ 
+  static configure(ymlPath:string) {
+
+    if (!this.taskRegistry) {
+      this.taskRegistry = new TaskRegistry();
     }
-  
-    static async execute(inputData: any) {
-      const matchedTask = this.taskRegistry.getMatchingTask(inputData);
-      console.log(matchedTask)
-  
-      if (matchedTask) {
-        // Use `await` to execute the task function
-        const result = this.taskRegistry.executeTask(matchedTask, inputData); // Using the updated TaskRegistry that help us to optimize the execution of class-based tasks and reduce unnecessary instantiations.
+
+    this.addTasksFromConfig(ymlPath);
+
+  }
 
 
-        // Handle the result if needed
-        return result;
+  static execute(inputData: any) {
+    const matchedTask: any = this.taskRegistry.getMatchingTask(inputData);
+
+    if (matchedTask) {
+      if (typeof matchedTask === 'function') {
+        // Function-based task
+        return matchedTask(inputData);
+      } else if (typeof matchedTask === 'object' && 'execute' in matchedTask) {
+        return matchedTask.execute(inputData);
       } else {
-        console.error('No matching task found.');
+        console.error('Unknown task type:', matchedTask);
         return null;
       }
-    }
-  
-    private static async addTasksFromConfig(ymlPath: string) {
-      // To support running from node_modules
-      if (__dirname.includes("node_modules")) {
-        __dirname = __dirname.replace("node_modules/node-taskflow/dist", "");
-      }
-  
-        const configPath = path.join(__dirname, ymlPath);
-        const config = this.loadConfig(configPath);
-
-        if (config && config.tasks) {
-            await Promise.all(
-                config.tasks.map(async (taskConfig) => {
-                    const { function: functionName, conditions } = taskConfig;
-                    const taskFunction = await this.loadTaskFunction(functionName);
-                    if (taskFunction) {
-                        this.addTask(taskFunction.default || taskFunction, conditions);
-                    }
-                })
-            );
-        }
-    }
-
-    private static loadConfig(configPath) {
-        try {
-            const configFile = fs.readFileSync(configPath, 'utf8');
-            return yaml.load(configFile);
-        } catch (error) {
-            console.error('Error loading configuration:', error);
-            return null;
-        }
-    }
-
-    private static async loadTaskFunction(functionName) {
-        try {
-            if (__dirname.includes('node_modules')) {
-                __dirname = __dirname.replace('node_modules/node-taskflow/dist', '');
-            }
-            return (await import(`${__dirname}/${functionName}`)).default;
-        } catch (error) {
-            console.error('Error loading task function:', error);
-            return null;
-        }
-    }
-
-    private static addTask(taskFunction, conditions) {
-        this.taskRegistry.addTask(taskFunction, conditions);
+    } else {
+      console.error('No matching task found.');
+      return null;
     }
 }
+
+
+
+
+  private static addTasksFromConfig(ymlPath: string) {
+    const configPath = path.join(__dirname, ymlPath);
+    const config = this.loadConfig(configPath);
+
+    if (config && config.tasks) {
+        config.tasks.forEach((taskConfig) => {
+            const { function: functionName, conditions } = taskConfig;
+            const taskClass = this.loadTaskClass(functionName); // Load the class
+            if (taskClass) {
+                const taskInstance = new taskClass(); // Create an instance
+                this.addTask(taskInstance, conditions); // Add the instance
+            }
+        });
+    }
+}
+
+private static loadTaskClass(filePath) {
+    try {
+        return require(`./${filePath}`).default;
+    } catch (error) {
+        console.error('Error loading task class:', error);
+        return null;
+    }
+}
+
+
+  private static loadConfig(configPath) {
+    try {
+      const configFile = fs.readFileSync(configPath, 'utf8');
+      //console.log('Loaded configuration:', configFile, yaml);
+      return yaml.load(configFile);
+    } catch (error) {
+      console.error('Error loading configuration:', error);
+      return null;
+    }
+  }
+
+
+
+  private static addTask(taskFunction, conditions) {
+    this.taskRegistry.addTask(taskFunction, conditions);
+  }   
+}
+
+
 
 export default TaskFlow;
