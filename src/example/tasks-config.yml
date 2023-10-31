@@ -3,7 +3,3 @@ settings:
 tasks:
   - name: Task1
     function: 'example/task1.js' # Specify the corrected relative path
-    conditions:
-      - type: 'gt'
-        property: 'dataValue'
-        additionalParam: '100'

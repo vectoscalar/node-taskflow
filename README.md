@@ -32,10 +32,10 @@ export class MyTask extends BaseTask {
 
 ```
 
-Define your task conditions in a yml file:
+Define your task conditions in a yml file for function based task and for class based task we can define in class function only no need to define in yaml:
 
 ```yaml
-  # test.yml in root directory
+  # test.yml in root directory for function based
   settings:
     - logLevel: info
   tasks:
@@ -45,6 +45,13 @@ Define your task conditions in a yml file:
       - type: 'gt'
         property: 'dataValue'
         threshold: 150
+  
+    # test.yml in root directory for class based
+  settings:
+    - logLevel: info
+  tasks:
+    - name: Task1
+      function: 'test.js'
 
 ```
 Run the executor:
