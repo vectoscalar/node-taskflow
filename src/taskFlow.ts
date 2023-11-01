@@ -60,17 +60,17 @@ private static addTasksFromConfig(ymlPath: string) {
   if (config && config.tasks) {
     config.tasks.forEach((taskConfig) => {
       if ('conditions' in taskConfig) {
-        const { function: functionName, conditions } = taskConfig;
+        const { path: filePath, conditions } = taskConfig;
 
         // If conditions are defined in the YAML, it's a function-based task
-        const taskClass = this.loadTaskClass(functionName); // Load the class
+        const taskClass = this.loadTaskClass(filePath); // Load the class
         if (taskClass) {
           this.addTask(taskClass, conditions);
         }
       } else {
         // If no conditions are defined, it's a class-based task
-        const { function: functionName } = taskConfig;
-        const taskClass = this.loadTaskClass(functionName); // Load the class
+        const { path: filePath } = taskConfig;
+        const taskClass = this.loadTaskClass(filePath); // Load the class
         if (taskClass) {
           const taskInstance = new taskClass(); // Create an instance
           this.addTask(taskInstance, []); // Add the instance with empty conditions

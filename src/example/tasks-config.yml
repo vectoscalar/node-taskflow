@@ -1,5 +1,5 @@
 settings:
   - logLevel: info
 tasks:
-  - name: Task1
-    function: 'example/task1.js' # Specify the corrected relative path
+  - className: Task1
+    path: 'example/task1.js' # Specify the corrected relative path
