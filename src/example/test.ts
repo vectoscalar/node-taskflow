@@ -1,9 +1,9 @@
-// test.ts
+
 import { TaskFlow } from '../index';
 
-// Configure the TaskFlow and execute tasks
-TaskFlow.configure('./example/tasks-config.yml').then(() => {
-    const inputData = { dataValue: 180 };
-    TaskFlow.execute(inputData);
-    console.log(inputData)
-});
+TaskFlow.configure('./example/tasks-config.yml');
+
+const inputData = 'This is an Order message.';
+TaskFlow.execute(inputData);
+
+
